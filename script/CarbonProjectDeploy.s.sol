@@ -37,7 +37,9 @@ forge script script/CarbonProjectDeployScript.s.sol:CarbonProjectDeployScript --
 forge script script/CarbonProjectDeployScript.s.sol:CarbonProjectDeployScript --rpc-url $RPC_POLYGON_TEST --broadcast --verify --chain polygon --etherscan-api-key $POLYGONSCAN_API_KEY -vvvv
 forge script .\script\CarbonProjectDeployScript.s.sol:CarbonProjectDeployScript --rpc-url %RPC_POLYGON_TEST% --broadcast --verify --chain polygon --etherscan-api-key %POLYGONSCAN_API_KEY% -vvvv
 echo %RPC_POLYGON_TEST% %POLYGONSCAN_API_KEY% %PRIVATE_KEY%
-forge script .\script\CarbonProjectDeploy.s.sol --rpc-url %RPC_POLYGON_TEST% --broadcast 
-forge script .\script\CarbonProjectDeploy.s.sol --rpc-url %RPC_POLYGON_TEST% --broadcast --verify --chain 80002 --etherscan-api-key %POLYGONSCAN_API_KEY% -vvvv
+
+https://polygonscan.com/address/0x28ab77381038dec2f31cf1c3f2a5c77055339a11#code
+
+forge script .\script\CarbonProjectDeploy.s.sol --rpc-url %RPC_POLYGON_TEST% --broadcast --verify --chain 137 --etherscan-api-key %POLYGONSCAN_API_KEY% -vvvv
 echo %RPC_POLYGON_TEST% %POLYGONSCAN_API_KEY% %PRIVATE_KEY%
 */
