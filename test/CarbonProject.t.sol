@@ -7,11 +7,13 @@ import {Test, console} from "forge-std/Test.sol";
 contract CarbonProjectTest is Test {
     string public uri = "https://www.neocarbon.com.br/br/registro/projeto?id={id}";
     address public owner = address(0x123);
+    uint256 public initialTokenAmount = 42338179;
+    uint256 public additionalTokenAmount = 7661821;
 
     CarbonProject public carbonProject;
 
     function setUp() public {
-        carbonProject = new CarbonProject(uri, owner);
+        carbonProject = new CarbonProject(uri, owner, initialTokenAmount);
     }
 
     function test_CarbonProject() public view {
@@ -59,6 +61,20 @@ contract CarbonProjectTest is Test {
         setDataTest();
         vm.prank(owner);
         setDataTest();
+    }
+
+    function test_OwnerBalance() public view {
+        uint256 balance = carbonProject.balanceOf(owner, 1);
+        console.log("Owner Balance: ", balance);
+        assertEq(balance, initialTokenAmount);
+    }
+
+    function test_Mint() public {
+        vm.prank(owner);
+        carbonProject.mint(owner, 1, additionalTokenAmount, "");
+        uint256 balance = carbonProject.balanceOf(owner, 1);
+        console.log("Owner Balance: ", balance);
+        assertEq(balance, initialTokenAmount + additionalTokenAmount);
     }
 
     function setDataTest() public {

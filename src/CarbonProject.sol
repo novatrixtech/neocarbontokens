@@ -2,9 +2,10 @@
 pragma solidity 0.8.25;
 
 import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
+import {ERC1155Burnable} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-contract CarbonProject is ERC1155, Ownable {
+contract CarbonProject is ERC1155, Ownable, ERC1155Burnable  {
     
     bool public _projectDataSet;
     uint256 public _id;
@@ -18,9 +19,10 @@ contract CarbonProject is ERC1155, Ownable {
     uint256 public _period;
     string public _areaSize;
 
-    constructor(string memory uri_, address owner_) ERC1155(uri_) Ownable(owner_) {
+    constructor(string memory uri_, address owner_, uint256 tokenAmount_) ERC1155(uri_) Ownable(owner_) {
         _setURI(uri_);
         _projectDataSet = false;
+        _mint(owner_, 1, tokenAmount_, "");
     }
 
     function setProjectData(
@@ -66,4 +68,12 @@ contract CarbonProject is ERC1155, Ownable {
         return (_id, _nameNumber, _proposer, _activity, _location, _status, _startDate, _endDate, _period, _areaSize, projectDataSet);
     }
 
+
+    function mint(address account, uint256 id, uint256 amount, bytes memory data) public onlyOwner {
+        _mint(account, id, amount, data);
+    }
+
+    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data) public onlyOwner {
+        _mintBatch(to, ids, amounts, data);
+    }
 }
