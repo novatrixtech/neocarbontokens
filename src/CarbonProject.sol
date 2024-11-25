@@ -7,25 +7,30 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
 contract CarbonProject is ERC1155, Ownable, ERC1155Burnable  {
     
-    bool public _projectDataSet;
-    uint256 public _id;
-    string public _nameNumber;
-    string public _proposer;
-    string public _activity;
-    string public _location;
-    string public _status;
-    uint256 public _startDate;
-    uint256 public _endDate;
-    uint256 public _period;
-    string public _areaSize;
+    struct Project {
+        bool projectDataSet;
+        uint256 id;
+        string nameNumber;
+        string proposer;
+        string activity;
+        string location;
+        string status;
+        uint256 startDate;
+        uint256 endDate;
+        uint256 period;
+        string areaSize;
+    }
+    
+    mapping (uint256 => Project) public projects;
 
-    constructor(string memory uri_, address owner_, uint256 tokenAmount_) ERC1155(uri_) Ownable(owner_) {
+    event NewProject(uint256 id, string nameNumber, string proposer, string activity, string location, string status, uint256 startDate, uint256 endDate, uint256 period, string areaSize);
+
+    constructor(string memory uri_, address owner_) ERC1155(uri_) Ownable(owner_) {
         _setURI(uri_);
-        _projectDataSet = false;
-        _mint(owner_, 1, tokenAmount_, "");
     }
 
     function setProjectData(
+        address projectOwner,
         uint256 id,
         string memory nameNumber,
         string memory proposer,
@@ -37,22 +42,27 @@ contract CarbonProject is ERC1155, Ownable, ERC1155Burnable  {
         uint256 period,
         string memory areaSize
     ) public onlyOwner returns (bool) {
-        require(!_projectDataSet, "Project data already set");
-        _id = id;
-        _nameNumber = nameNumber;
-        _proposer = proposer;
-        _activity = activity;
-        _location = location;
-        _status = status;
-        _startDate = startDate;
-        _endDate = endDate;
-        _period = period;
-        _areaSize = areaSize;
-        _projectDataSet = true;
+        require(balanceOf(projectOwner, id)>0, "Tokens not minted");
+        require(!projects[id].projectDataSet, "Project already exists");
+        projects[id] = Project({
+            projectDataSet: true,
+            id: id,
+            nameNumber: nameNumber,
+            proposer: proposer,
+            activity: activity,
+            location: location,
+            status: status,
+            startDate: startDate,
+            endDate: endDate,
+            period: period,
+            areaSize: areaSize
+        });
+        emit NewProject(id, nameNumber, proposer, activity, location, status, startDate, endDate, period, areaSize);
         return true;
     }
 
-    function getProjectData() public view returns (
+    function getProjectData(uint256 id_) public view returns (
+        bool projectDataSet,
         uint256 id,
         string memory nameNumber,
         string memory proposer,
@@ -62,10 +72,22 @@ contract CarbonProject is ERC1155, Ownable, ERC1155Burnable  {
         uint256 startDate,
         uint256 endDate,
         uint256 period,
-        string memory areaSize,
-        bool projectDataSet
+        string memory areaSize
     ) {
-        return (_id, _nameNumber, _proposer, _activity, _location, _status, _startDate, _endDate, _period, _areaSize, projectDataSet);
+        Project memory project = projects[id_];
+        return (
+            project.projectDataSet,
+            project.id,
+            project.nameNumber,
+            project.proposer,
+            project.activity,
+            project.location,
+            project.status,
+            project.startDate,
+            project.endDate,
+            project.period,
+            project.areaSize
+        );
     }
 
 
@@ -73,7 +95,4 @@ contract CarbonProject is ERC1155, Ownable, ERC1155Burnable  {
         _mint(account, id, amount, data);
     }
 
-    function mintBatch(address to, uint256[] memory ids, uint256[] memory amounts, bytes memory data) public onlyOwner {
-        _mintBatch(to, ids, amounts, data);
-    }
 }

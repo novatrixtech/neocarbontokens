@@ -13,7 +13,7 @@ contract CarbonProjectTest is Test {
     CarbonProject public carbonProject;
 
     function setUp() public {
-        carbonProject = new CarbonProject(uri, owner, initialTokenAmount);
+        carbonProject = new CarbonProject(uri, owner);
     }
 
     function test_CarbonProject() public view {
@@ -29,9 +29,11 @@ contract CarbonProjectTest is Test {
     }
 
     function test_SetData() public {
-        vm.prank(owner);
+        vm.startPrank(owner);
+        carbonProject.mint(owner, 4561, initialTokenAmount, "");
         setDataTest();
-        (uint256 id,
+        ( bool projectDataSet,
+        uint256 id,
         string memory nameNumber,
         string memory proposer,
         string memory activity,
@@ -40,8 +42,8 @@ contract CarbonProjectTest is Test {
         uint256 startDate,
         uint256 endDate,
         uint256 period,
-        string memory areaSize,
-        bool projectDataSet) = carbonProject.getProjectData();
+        string memory areaSize) = carbonProject.getProjectData(4561);
+        vm.stopPrank();
         console.log("Project Data: ", projectDataSet);
         // assertEq(projectDataSet, true);
         assertEq(id, 4561);
@@ -57,13 +59,16 @@ contract CarbonProjectTest is Test {
     }
 
     function testFail_SetDataTwice() public {
-        vm.prank(owner);
+        vm.startPrank(owner);
+        carbonProject.mint(owner, 4561, initialTokenAmount, "");
         setDataTest();
-        vm.prank(owner);
         setDataTest();
+        vm.stopPrank();
     }
 
-    function test_OwnerBalance() public view {
+    function test_OwnerBalance() public {
+        vm.prank(owner);
+        carbonProject.mint(owner, 1, initialTokenAmount, "");
         uint256 balance = carbonProject.balanceOf(owner, 1);
         console.log("Owner Balance: ", balance);
         assertEq(balance, initialTokenAmount);
@@ -71,14 +76,29 @@ contract CarbonProjectTest is Test {
 
     function test_Mint() public {
         vm.prank(owner);
-        carbonProject.mint(owner, 1, additionalTokenAmount, "");
+        carbonProject.mint(owner, 1, initialTokenAmount, "");
         uint256 balance = carbonProject.balanceOf(owner, 1);
         console.log("Owner Balance: ", balance);
+        assertEq(balance, initialTokenAmount);
+    }
+
+    function test_AdditionalMint() public {
+        vm.prank(owner);
+        carbonProject.mint(owner, 1, initialTokenAmount, "");
+        uint256 balance = carbonProject.balanceOf(owner, 1);
+        console.log("Owner Balance: ", balance);
+        assertEq(balance, initialTokenAmount);
+        vm.prank(owner);
+        carbonProject.mint(owner, 1, additionalTokenAmount, "");
+        balance = carbonProject.balanceOf(owner, 1);
+        console.log("Second Owner Balance: ", balance);    
         assertEq(balance, initialTokenAmount + additionalTokenAmount);
+
     }
 
     function setDataTest() public {
         bool executed = carbonProject.setProjectData(
+            owner,
             4561,
             "MTALT20230003",
             "AGROPECUARIA J L LTDA",
