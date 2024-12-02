@@ -5,9 +5,9 @@ import {Script, console} from "forge-std/Script.sol";
 import {CarbonProject} from "../src/CarbonProject.sol";
 
 contract CarbonProjectDeployScript is Script {
+    
     CarbonProject public cp;
     
-
     function setUp() public {}
 
     function run() public {
