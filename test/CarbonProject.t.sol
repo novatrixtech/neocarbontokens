@@ -108,7 +108,8 @@ contract CarbonProjectTest is Test {
             1691971200,
             1723593600,
             315360000,
-            "2102.83 hectares");
+            "2102.83 hectares",
+            "4561.json");
 
         console.log("CarbonProject: ", address(carbonProject));
         console.log("Executed setProjectData: ", executed);
