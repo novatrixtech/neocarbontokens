@@ -14,7 +14,7 @@ contract CarbonProjectDeployScript is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
         vm.startBroadcast(deployerPrivateKey);
         address owner = address(0x7aC722a69CDb106127f1f2cC86761B28176E5379);
-        cp = new CarbonProject("https://www.neocarbon.com.br/br/registro/projeto?id={id}", owner);        
+        cp = new CarbonProject("", owner);        
     }
 
 }

@@ -5,7 +5,7 @@ import {CarbonProject} from "../src/CarbonProject.sol";
 import {Test, console} from "forge-std/Test.sol";
 
 contract CarbonProjectTest is Test {
-    string public uri = "https://www.neocarbon.com.br/br/registro/projeto?id={id}";
+    string public uri = "";
     address public owner = address(0x123);
     uint256 public initialTokenAmount = 42338179;
     uint256 public additionalTokenAmount = 7661821;
@@ -18,9 +18,7 @@ contract CarbonProjectTest is Test {
 
     function test_CarbonProject() public view {
         console.log("CarbonProject: ", address(carbonProject));
-        console.log("URI: ", carbonProject.uri(5451));
         console.log("Owner: ", carbonProject.owner());
-        assertEq(carbonProject.uri(5451), uri);
         assertEq(carbonProject.owner(), owner);
     }
 
@@ -56,6 +54,7 @@ contract CarbonProjectTest is Test {
         assertEq(endDate, 1723593600);
         assertEq(period, 315360000);
         assertEq(areaSize, "2102.83 hectares");
+        assertEq(carbonProject.uri(id), "https://www.neocarbon.com.br/br/registro/projeto?id=4561");
     }
 
     function testFail_SetDataTwice() public {
@@ -109,7 +108,7 @@ contract CarbonProjectTest is Test {
             1723593600,
             315360000,
             "2102.83 hectares",
-            "4561.json");
+            "https://www.neocarbon.com.br/br/registro/projeto?id=4561");
 
         console.log("CarbonProject: ", address(carbonProject));
         console.log("Executed setProjectData: ", executed);
