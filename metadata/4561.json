@@ -2,5 +2,9 @@
   "name": "MORRO DO FOGO FARM PROJECT - CERRADO CONSERVATION",
   "description": "UCF - Forest Carbon Unity - ARR e REDD+ in Alto Taquari, Mato Grosso, Brazil. - area 2102.83 hectares",
   "image": "https://res.cloudinary.com/dpulkvkgv/image/upload/v1689361723/projects/hqdilywyvsgwfcfjc50c.jpg",
-  "project_id": 4561
+  "properties": {
+    "website": "https://www.neocarbon.com.br/br/registro/projeto?id=4561",
+    "location": "ALTO TAQUARI - MATO GROSSO - BRAZIL / UTM long 220684.00 m E - lat 8018931.00 m S",
+    "project_id": 4561
+  }
 }
